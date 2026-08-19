@@ -1,0 +1,38 @@
+---
+const base = import.meta.env.BASE_URL;
+---
+
+<div
+  id="lightbox-overlay"
+  class="fixed inset-0 z-50 hidden items-center justify-center bg-bg/95 p-4 backdrop-blur-sm"
+  role="dialog"
+  aria-modal="true"
+  aria-hidden="true"
+  aria-label="Imagem ampliada"
+>
+  <button
+    id="lightbox-close"
+    type="button"
+    aria-label="Fechar imagem ampliada"
+    class="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-surface text-text transition-colors hover:border-accent hover:text-accent-bright"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.75"
+      class="h-5 w-5"
+    >
+      <path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"></path>
+    </svg>
+  </button>
+  <img
+    id="lightbox-img"
+    src=""
+    alt=""
+    class="max-h-[90vh] max-w-[90vw] rounded-lg border border-border object-contain"
+  />
+</div>
+
+<script src={`${base}lightbox.js`} defer></script>

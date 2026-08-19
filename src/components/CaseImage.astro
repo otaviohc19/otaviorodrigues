@@ -12,8 +12,12 @@ const { src, alt, caption } = Astro.props;
 ---
 
 <figure>
-  <div class="overflow-hidden rounded-lg border border-border">
+  <button
+    type="button"
+    class="lightbox-trigger block w-full cursor-zoom-in overflow-hidden rounded-lg border border-border transition-opacity hover:opacity-90"
+    aria-label={`Ampliar imagem: ${alt}`}
+  >
     <Image src={src} alt={alt} width={800} quality={80} format="webp" />
-  </div>
+  </button>
   {caption && <figcaption>{caption}</figcaption>}
 </figure>

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import Header from '../components/Header.astro';
+import Lightbox from '../components/Lightbox.astro';
 
 type Domain = 'kubernetes' | 'network' | 'security' | 'observability' | 'cloud';
 
@@ -53,4 +54,5 @@ const accent = domainText[domain];
       <slot />
     </div>
   </main>
+  <Lightbox />
 </BaseLayout>
