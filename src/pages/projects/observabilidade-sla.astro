@@ -1,5 +1,7 @@
 ---
 import ProjectLayout from '../../layouts/ProjectLayout.astro';
+import CaseImage from '../../components/CaseImage.astro';
+import zabbixMonitoring from '../../assets/case-studies/zabbix-monitoring.png';
 ---
 
 <ProjectLayout
@@ -23,6 +25,12 @@ import ProjectLayout from '../../layouts/ProjectLayout.astro';
     automaticamente para Jira e Microsoft Teams, no mesmo fluxo que já era usado para alertas de
     infraestrutura vindos do Zabbix.
   </p>
+
+  <CaseImage
+    src={zabbixMonitoring}
+    alt="Lista de items monitorados no Zabbix para um host, mostrando métricas de CPU, memória, swap e sistema de arquivos com valores em tempo real"
+    caption="Items de monitoramento no Zabbix — a mesma camada de alerta de infraestrutura reaproveitada para alimentar o fluxo de SLA. Hostname removido."
+  />
 
   <h2>Desafios técnicos</h2>
   <ul>

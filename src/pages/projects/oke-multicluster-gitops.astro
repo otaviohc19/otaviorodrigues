@@ -1,5 +1,7 @@
 ---
 import ProjectLayout from '../../layouts/ProjectLayout.astro';
+import CaseImage from '../../components/CaseImage.astro';
+import okeDashboard from '../../assets/case-studies/oke-dashboard.png';
 ---
 
 <ProjectLayout
@@ -49,6 +51,12 @@ import ProjectLayout from '../../layouts/ProjectLayout.astro';
       havia, exigindo limpeza manual da annotation para o sync estabilizar.
     </li>
   </ul>
+
+  <CaseImage
+    src={okeDashboard}
+    alt="Dashboard Grafana mostrando pods em execução, pods pendentes, pods em falha, consumo de CPU/memória por nó e por namespace em um cluster OKE"
+    caption="Dashboard Grafana consumindo métricas do cluster — pods em execução/falha, consumo de recursos por nó e por namespace. Identificadores internos foram removidos."
+  />
 
   <h2>Resultado</h2>
   <p>
