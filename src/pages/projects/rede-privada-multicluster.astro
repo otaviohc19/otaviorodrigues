@@ -1,0 +1,56 @@
+---
+import ProjectLayout from '../../layouts/ProjectLayout.astro';
+---
+
+<ProjectLayout
+  title="Rede privada entre ambientes"
+  description="Túneis WireGuard e VPN corporativa conectando clusters e ambientes distintos, com diagnóstico de roteamento, MTU e camadas de firewall na nuvem."
+  domain="network"
+  caseId="03"
+>
+  <h2>Contexto</h2>
+  <p>
+    Múltiplos ambientes (produção, homologação/revisão) precisando se comunicar de forma segura
+    entre si e com uma VPN corporativa de terceiros, sem expor serviços internos publicamente. A
+    superfície de rede envolvia clusters Kubernetes, VMs de banco de dados e serviços legados — cada
+    um com seu próprio conjunto de regras de firewall.
+  </p>
+
+  <h2>Abordagem</h2>
+  <p>
+    Dois túneis <strong>WireGuard</strong> dedicados conectando ambientes distintos, complementados por
+    integração com um cliente VPN corporativo (FortiClient) de um parceiro externo. Para reduzir erro
+    humano na troca de contexto entre ambientes, automatizei a alternância de VPN e contexto <code
+      >kubectl</code
+    > em um único script.
+  </p>
+
+  <h2>Diagnóstico recorrente</h2>
+  <ul>
+    <li>
+      <strong>Gaps de roteamento</strong> — rotas ausentes em <code>AllowedIPs</code> do WireGuard, ou
+      tabelas de roteamento com <code>Table = off</code> exigindo rotas manuais via{' '}
+      <code>PostUp</code>.
+    </li>
+    <li>
+      <strong>Camadas de firewall na OCI</strong> — Security Lists (nível de subnet) e NSGs (nível de
+      recurso) se sobrepondo de formas não óbvias; um bloqueio podia estar em qualquer uma das duas camadas,
+      exigindo checagem sistemática de ambas.
+    </li>
+    <li>
+      <strong>MTU</strong> — pacotes fragmentando silenciosamente em túneis com MTU mal configurado, causando
+      timeouts intermitentes difíceis de correlacionar com a causa real sem captura de tráfego.
+    </li>
+    <li>
+      <strong>DNS-over-HTTPS</strong> — navegadores ignorando o resolver interno da VPN para domínios
+      privados, fazendo resolução de nome falhar mesmo com a rota de rede correta.
+    </li>
+  </ul>
+
+  <h2>Resultado</h2>
+  <p>
+    Conectividade estável entre ambientes com troca de contexto automatizada, reduzindo o tempo de
+    diagnóstico de problemas de rede — a maioria dos casos hoje se resolve consultando um checklist
+    de causas conhecidas antes de qualquer investigação mais profunda.
+  </p>
+</ProjectLayout>

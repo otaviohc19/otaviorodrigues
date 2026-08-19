@@ -3,16 +3,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import StatusPanel from '../components/StatusPanel.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import { Image } from 'astro:assets';
+import profilePhoto from '../assets/profile.jpg';
 
 const projects = [
   {
-    slug: 'migracao-aws-oci',
+    slug: 'infraestrutura-hibrida-aws-oci',
     caseId: '01',
-    domain: 'finops' as const,
-    title: 'Migração de custos AWS → OCI',
+    domain: 'cloud' as const,
+    title: 'Infraestrutura híbrida: AWS e OCI',
     summary:
-      'Análise formal de custos comparando provedores após uma migração, identificando redução estrutural via compute e rede, e um ponto de atenção específico em banco de dados gerenciado.',
-    tags: ['FinOps', 'OCI', 'AWS'],
+      'Arquitetura de infraestrutura operando entre dois provedores de nuvem, com decisões de rede, compute e a análise de custo que sustentou a migração.',
+    tags: ['AWS', 'OCI', 'Multi-cloud'],
   },
   {
     slug: 'oke-multicluster-gitops',
@@ -24,22 +26,40 @@ const projects = [
     tags: ['Kubernetes', 'ArgoCD', 'CI/CD'],
   },
   {
-    slug: 'pki-privada-cert-manager',
+    slug: 'rede-privada-multicluster',
     caseId: '03',
-    domain: 'security' as const,
-    title: 'PKI privada com cert-manager',
+    domain: 'network' as const,
+    title: 'Rede privada entre ambientes',
     summary:
-      'Emissão automatizada de certificados internos usando uma CA privada na nuvem integrada ao cert-manager, com renovação automática e cadeia de confiança corretamente distribuída.',
-    tags: ['TLS', 'PKI', 'cert-manager'],
+      'Túneis WireGuard e VPN corporativa conectando clusters e ambientes distintos, com diagnóstico de roteamento, MTU e camadas de firewall na nuvem.',
+    tags: ['WireGuard', 'VPN', 'OCI NSG'],
+  },
+  {
+    slug: 'pki-privada-cert-manager',
+    caseId: '04',
+    domain: 'security' as const,
+    title: 'PKI privada e ciclo de vida de certificados',
+    summary:
+      'Emissão e renovação automatizada de certificados internos via CA privada, com a cadeia de confiança corretamente distribuída entre ambientes.',
+    tags: ['PKI', 'TLS', 'Segurança'],
   },
   {
     slug: 'observabilidade-sla',
-    caseId: '04',
+    caseId: '05',
     domain: 'observability' as const,
     title: 'Observabilidade e SLA de suporte',
     summary:
-      'Integração de dados de helpdesk via API REST com Grafana para acompanhamento de SLA em tempo real, substituindo revisão manual de tickets por alertas automáticos.',
+      'Integração de dados de helpdesk via API REST com Grafana para acompanhamento de SLA em tempo real, substituindo revisão manual de tickets.',
     tags: ['Grafana', 'Zabbix', 'SLA'],
+  },
+  {
+    slug: 'seguranca-pipeline-portfolio',
+    caseId: '06',
+    domain: 'security' as const,
+    title: 'Segurança aplicada: o pipeline deste portfólio',
+    summary:
+      'Como a lente de Cibersegurança se traduz em prática: SAST, secret scanning, SBOM e CSP aplicados ao próprio repositório que sustenta este site.',
+    tags: ['SAST', 'CI/CD', 'CSP'],
   },
 ];
 
@@ -67,14 +87,14 @@ const stack = [
 ];
 
 const domainText: Record<
-  'kubernetes' | 'network' | 'security' | 'observability' | 'finops',
+  'kubernetes' | 'network' | 'security' | 'observability' | 'cloud',
   string
 > = {
   kubernetes: 'text-accent-bright',
   network: 'text-teal',
   security: 'text-status',
   observability: 'text-ok',
-  finops: 'text-violet',
+  cloud: 'text-rose',
 };
 ---
 
@@ -92,7 +112,7 @@ const domainText: Record<
       <div class="relative">
         <p class="font-mono text-sm text-accent-bright">DevOps · Infraestrutura em nuvem</p>
         <h1 class="mt-3 text-3xl font-bold leading-tight text-text sm:text-4xl">
-          Construo e mantenho a infraestrutura por trás dos sistemas -{' '}
+          Construo e mantenho a infraestrutura por trás dos sistemas —{' '}
           <span class="text-accent-bright">e este site é prova disso</span><span
             class="cursor-blink"></span>
         </h1>
@@ -143,6 +163,24 @@ const domainText: Record<
       <h2 class="font-mono text-sm uppercase tracking-wide text-accent-bright">$ cat sobre.md</h2>
       <div class="mt-4 grid gap-8 sm:grid-cols-[1.3fr,1fr]">
         <div class="space-y-4 text-muted">
+          <div class="flex items-center gap-4">
+            <div
+              class="h-16 w-16 shrink-0 overflow-hidden rounded-lg border border-border sm:h-20 sm:w-20"
+            >
+              <Image
+                src={profilePhoto}
+                alt="Foto de Otávio"
+                width={160}
+                height={160}
+                quality={80}
+                class="h-full w-full object-cover"
+              />
+            </div>
+            <div>
+              <p class="font-mono text-sm text-text">Otávio</p>
+              <p class="font-mono text-xs text-muted">DevOps · Infraestrutura & Segurança</p>
+            </div>
+          </div>
           <p>
             Atuo com DevOps e infraestrutura, gerenciando ambientes Kubernetes multi-cluster (OKE)
             que sustentam múltiplos times e namespaces de produto. Minha rotina passa por GitOps

@@ -1,0 +1,56 @@
+---
+import ProjectLayout from '../../layouts/ProjectLayout.astro';
+---
+
+<ProjectLayout
+  title="Infraestrutura híbrida: AWS e OCI"
+  description="Arquitetura de infraestrutura operando entre AWS e OCI, decisões de rede e compute, e a análise de custo que sustentou a migração."
+  domain="cloud"
+  caseId="01"
+>
+  <h2>Contexto</h2>
+  <p>
+    Infraestrutura originalmente hospedada na AWS, migrada para OCI (Oracle Cloud Infrastructure)
+    mantendo os mesmos níveis de serviço para os times que dependem dela — APIs, portal, RPAs e
+    serviços de whitelabel. O desafio não era só "trocar o provedor", era manter zero downtime
+    perceptível durante a transição e redesenhar decisões de rede e compute que não faziam sentido
+    apenas copiadas de um provedor para o outro.
+  </p>
+
+  <h2>Decisões de arquitetura</h2>
+  <p>
+    Clusters Kubernetes (OKE) substituindo a orquestração anterior, VCNs e Network Security Groups
+    redesenhados para refletir o novo modelo de segmentação de rede da OCI (diferente do modelo de
+    Security Groups da AWS), e políticas de IAM reconstruídas do zero seguindo o princípio de menor
+    privilégio — em vez de replicar permissões amplas que existiam por conveniência no ambiente
+    anterior.
+  </p>
+
+  <h2>Análise de custo</h2>
+  <p>
+    Após a migração, formalizei uma análise comparativa de custos para validar a decisão junto à
+    liderança técnica — não apenas confirmar economia, mas identificar <strong>onde</strong> ela realmente
+    vinha, e onde o novo provedor custava mais.
+  </p>
+  <p>
+    O levantamento, item a item (compute, rede/egress, armazenamento, banco de dados gerenciado),
+    mostrou redução estrutural de custo — majoritariamente explicada por compute e rede. Uma exceção
+    notável: o serviço de banco de dados gerenciado (MySQL HeatWave) mostrou custo mais alto que o
+    equivalente anterior, o que exigiu investigação separada sobre modelo de billing e OCIDs
+    cobrados — inclusive uma discrepância entre o número de OCIDs de cobrança e o número de
+    instâncias de banco visíveis no console, ainda em apuração.
+  </p>
+
+  <h2>Resultado</h2>
+  <p>
+    Migração concluída sem incidente perceptível para os usuários finais, com redução estrutural de
+    custo documentada e políticas de IAM mais seguras que as do ambiente de origem — um benefício
+    que não estava no escopo original, mas surgiu naturalmente de reconstruir a infraestrutura do
+    zero em vez de apenas replicá-la.
+  </p>
+
+  <p class="pt-4 text-sm text-muted/80">
+    <strong>Nota:</strong> valores e nomes de sistemas foram omitidos por confidencialidade. Disponível
+    para detalhar a metodologia em entrevista.
+  </p>
+</ProjectLayout>

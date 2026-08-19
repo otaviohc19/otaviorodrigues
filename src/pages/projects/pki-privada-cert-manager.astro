@@ -3,46 +3,50 @@ import ProjectLayout from '../../layouts/ProjectLayout.astro';
 ---
 
 <ProjectLayout
-  title="PKI privada com cert-manager"
-  description="Emissão automatizada de certificados internos com CA privada em nuvem integrada ao cert-manager, incluindo a distinção entre confiar na raiz e confiar em folhas individuais."
+  title="PKI privada e ciclo de vida de certificados"
+  description="Emissão e renovação automatizada de certificados internos via CA privada, com a cadeia de confiança corretamente distribuída entre ambientes."
   domain="security"
-  caseId="03"
+  caseId="04"
 >
   <h2>Contexto</h2>
   <p>
-    Serviços internos (em domínios privados, sem exposição pública) precisavam de TLS real, sem
-    depender de certificados autoassinados renovados manualmente — fonte comum de expiração
-    silenciosa e alertas de navegador para quem acessa esses serviços internamente.
+    Serviços internos, em domínios privados sem exposição pública, precisavam de TLS real — sem
+    depender de certificados autoassinados renovados manualmente, fonte comum de expiração
+    silenciosa e alertas de navegador para quem acessa esses serviços no dia a dia.
   </p>
 
   <h2>Abordagem</h2>
   <p>
-    Configuração de uma CA privada subordinada na nuvem (OCI Certificates), integrada ao{' '}
-    <strong>cert-manager</strong> via um <code>Issuer</code> customizado. A partir disso, qualquer serviço
-    só precisa declarar um <code>Certificate</code> no seu manifesto — emissão e renovação passam a ser
-    automáticas.
+    Estabelecimento de uma <strong>autoridade certificadora privada</strong> na nuvem, com emissão e renovação
+    de certificados automatizadas via ferramentas de orquestração (no caso,
+    <code>cert-manager</code> no Kubernetes) — o serviço só precisa declarar que precisa de um certificado;
+    o ciclo de vida inteiro passa a ser automático.
   </p>
 
-  <h2>Desafio técnico principal</h2>
+  <h2>O ponto que mais importa entender</h2>
   <p>
-    O ponto que exigiu mais investigação: importar certificados-folha individuais no repositório de
-    confiança do navegador <em>não</em> estabelece confiança na cadeia como um todo — cada novo serviço
-    gerava um novo alerta de certificado não confiável, mesmo emitido pela mesma CA. A correção foi importar
-    o <strong>certificado raiz da CA</strong> (não os certificados-folha) no repositório de confiança
-    do sistema operacional/navegador, o que resolve para toda a cadeia de uma vez — comportamento esperado
-    de PKI, mas fácil de errar na prática quando não se está pensando em termos de cadeia de confiança.
+    O detalhe técnico que exigiu mais investigação, e que generaliza para qualquer PKI privada:
+    importar certificados-folha individuais no repositório de confiança de um navegador ou sistema{
+      ' '
+    }
+    <em>não</em> estabelece confiança na cadeia como um todo — cada novo serviço gerava um novo alerta
+    de certificado não confiável, mesmo emitido pela mesma CA. A correção correta é importar o <strong
+      >certificado raiz da CA</strong
+    > no repositório de confiança, o que resolve para toda a cadeia de uma vez. É um comportamento esperado
+    de PKI, mas fácil de errar na prática quando não se está pensando explicitamente em termos de cadeia
+    de confiança.
   </p>
   <p>
-    Um segundo problema relacionado: em alguns navegadores, o DNS-over-HTTPS ignorava o resolver
-    interno da VPN para os domínios privados, fazendo a validação de nome falhar mesmo com o
-    certificado correto — resolvido ajustando a configuração de DoH para respeitar o resolver da
-    rede privada nesses domínios.
+    Um segundo problema relacionado, mais específico de ambiente: em alguns navegadores, o
+    DNS-over-HTTPS ignorava o resolver interno da rede privada, fazendo a validação de nome falhar
+    mesmo com o certificado correto — resolvido ajustando a configuração de DoH para respeitar o
+    resolver da rede privada nesses domínios.
   </p>
 
   <h2>Resultado</h2>
   <p>
     Eliminação de expiração manual de certificados internos e padronização de TLS em todos os
-    serviços privados, com um único ponto de configuração (o <code>Issuer</code>) para toda a
-    infraestrutura.
+    serviços privados, com um único ponto de configuração para toda a infraestrutura — o tipo de
+    decisão que só compensa investigar a fundo uma vez, e depois se replica sem esforço adicional.
   </p>
 </ProjectLayout>

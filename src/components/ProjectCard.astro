@@ -1,5 +1,5 @@
 ---
-type Domain = 'kubernetes' | 'network' | 'security' | 'observability' | 'finops';
+type Domain = 'kubernetes' | 'network' | 'security' | 'observability' | 'cloud';
 
 interface Props {
   slug: string;
@@ -14,6 +14,7 @@ const { slug, title, summary, tags, caseId, domain } = Astro.props;
 const base = import.meta.env.BASE_URL;
 
 const domainStyles: Record<Domain, { bar: string; hoverText: string; tag: string }> = {
+  cloud: { bar: 'bg-rose', hoverText: 'group-hover:text-rose', tag: 'text-rose' },
   kubernetes: {
     bar: 'bg-accent',
     hoverText: 'group-hover:text-accent-bright',
@@ -22,7 +23,6 @@ const domainStyles: Record<Domain, { bar: string; hoverText: string; tag: string
   network: { bar: 'bg-teal', hoverText: 'group-hover:text-teal', tag: 'text-teal' },
   security: { bar: 'bg-status', hoverText: 'group-hover:text-status', tag: 'text-status' },
   observability: { bar: 'bg-ok', hoverText: 'group-hover:text-ok', tag: 'text-ok' },
-  finops: { bar: 'bg-violet', hoverText: 'group-hover:text-violet', tag: 'text-violet' },
 };
 
 const style = domainStyles[domain];
@@ -47,4 +47,13 @@ const style = domainStyles[domain];
       ))
     }
   </ul>
+  <p
+    class:list={[
+      'mt-4 flex items-center gap-1 font-mono text-xs text-muted/70 transition-colors',
+      style.hoverText,
+    ]}
+  >
+    ver caso completo
+    <span class="transition-transform group-hover:translate-x-0.5" aria-hidden="true">→</span>
+  </p>
 </a>

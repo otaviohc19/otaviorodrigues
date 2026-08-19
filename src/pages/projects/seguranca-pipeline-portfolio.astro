@@ -1,0 +1,69 @@
+---
+import ProjectLayout from '../../layouts/ProjectLayout.astro';
+---
+
+<ProjectLayout
+  title="Segurança aplicada: o pipeline deste portfólio"
+  description="Como a lente de Cibersegurança se traduz em prática: SAST, secret scanning, SBOM e CSP aplicados ao próprio repositório que sustenta este site."
+  domain="security"
+  caseId="06"
+>
+  <h2>Contexto</h2>
+  <p>
+    Este case é um pouco diferente dos outros: em vez de descrever um ambiente de produção
+    corporativo, ele descreve a segurança do <strong>próprio site que você está vendo agora</strong
+    >{' '}
+    — porque cursar pós-graduação em Cibersegurança só tem valor prático se aplicado além de projetos
+    rotulados como "segurança". O código completo está público no{' '}
+    <a
+      href="https://github.com/otaviohc19/otaviorodrigues"
+      class="text-status underline decoration-status/40 underline-offset-2"
+    >
+      repositório deste portfólio
+    </a>
+    .
+  </p>
+
+  <h2>O que roda a cada push</h2>
+  <ul>
+    <li>
+      <strong>SAST (CodeQL)</strong> — análise estática de código a cada push/PR e semanalmente, procurando
+      padrões de vulnerabilidade antes que cheguem à produção.
+    </li>
+    <li>
+      <strong>Secret scanning (Gitleaks)</strong> — garante que nenhuma chave, token ou credencial seja
+      commitada, mesmo acidentalmente — e mesmo que seja removida depois, o histórico do Git preservaria
+      o segredo se não fosse pego na hora.
+    </li>
+    <li>
+      <strong>Dependency scanning (Dependabot)</strong> — monitoramento semanal de dependências com vulnerabilidades
+      conhecidas (CVEs), com regras para não misturar bumps de rotina com major versions que exigem migração
+      manual.
+    </li>
+    <li>
+      <strong>SBOM (Software Bill of Materials)</strong> — gerado a cada release, documentando exatamente
+      quais bibliotecas e versões compõem o site, para rastreabilidade caso uma vulnerabilidade nova seja
+      descoberta no futuro.
+    </li>
+  </ul>
+
+  <h2>Decisão consciente: CSP num ambiente sem controle de servidor</h2>
+  <p>
+    O site é hospedado no GitHub Pages, que não permite configurar headers HTTP customizados. Isso
+    limita a eficácia de uma Content-Security-Policy real — a alternativa (CSP via{' '}
+    <code>&lt;meta&gt;</code>) não cobre diretivas como <code>frame-ancestors</code>, que só
+    funcionam como header HTTP verdadeiro.
+  </p>
+  <p>
+    A decisão foi documentar essa limitação explicitamente em vez de aparentar uma segurança que o
+    ambiente de hospedagem não sustenta — um princípio que vale tanto para um portfólio pessoal
+    quanto para infraestrutura corporativa: ser honesto sobre onde a superfície de proteção é mais
+    fraca é mais útil do que fingir que ela não existe.
+  </p>
+
+  <h2>Resultado</h2>
+  <p>
+    Um pipeline auditável publicamente, com verificações de segurança reais em vez de apenas citadas
+    — qualquer um pode abrir a aba <em>Actions</em> do repositório e ver os checks passando.
+  </p>
+</ProjectLayout>

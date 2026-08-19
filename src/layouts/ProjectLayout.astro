@@ -2,7 +2,7 @@
 import BaseLayout from './BaseLayout.astro';
 import Header from '../components/Header.astro';
 
-type Domain = 'kubernetes' | 'network' | 'security' | 'observability' | 'finops';
+type Domain = 'kubernetes' | 'network' | 'security' | 'observability' | 'cloud';
 
 interface Props {
   title: string;
@@ -15,19 +15,19 @@ const { title, description, domain, caseId } = Astro.props;
 const base = import.meta.env.BASE_URL;
 
 const domainText: Record<Domain, string> = {
+  cloud: 'text-rose',
   kubernetes: 'text-accent-bright',
   network: 'text-teal',
   security: 'text-status',
   observability: 'text-ok',
-  finops: 'text-violet',
 };
 
 const domainH2: Record<Domain, string> = {
+  cloud: '[&_h2]:text-rose',
   kubernetes: '[&_h2]:text-accent-bright',
   network: '[&_h2]:text-teal',
   security: '[&_h2]:text-status',
   observability: '[&_h2]:text-ok',
-  finops: '[&_h2]:text-violet',
 };
 
 const accent = domainText[domain];
@@ -47,6 +47,7 @@ const accent = domainText[domain];
         '[&_h2]:mt-10 [&_h2]:font-mono [&_h2]:text-sm [&_h2]:uppercase [&_h2]:tracking-wide',
         domainH2[domain],
         '[&_p]:leading-relaxed [&_li]:leading-relaxed [&_strong]:text-text',
+        '[&_figure]:mt-6 [&_figcaption]:mt-2 [&_figcaption]:font-mono [&_figcaption]:text-xs [&_figcaption]:text-muted/70',
       ]}
     >
       <slot />
