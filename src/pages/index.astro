@@ -5,6 +5,7 @@ import StatusPanel from '../components/StatusPanel.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { Image } from 'astro:assets';
 import profilePhoto from '../assets/profile.jpg';
+import TerminalWindow from '../components/TerminalWindow.astro';
 
 const projects = [
   {
@@ -100,9 +101,9 @@ const domainText: Record<
 
 <BaseLayout title="Otávio — DevOps & Infraestrutura em Nuvem">
   <Header />
-  <main id="conteudo" class="mx-auto max-w-4xl px-6 py-16">
+  <main id="conteudo" class="mx-auto max-w-6xl px-6 py-16">
     <section
-      class="relative grid gap-10 overflow-hidden rounded-xl border border-border/60 bg-grid-dots px-6 py-10 sm:grid-cols-[1.1fr,1fr] sm:items-center sm:px-10"
+      class="relative grid gap-10 overflow-hidden rounded-xl border border-border/60 bg-grid-dots px-6 py-10 sm:px-10 lg:grid-cols-[1.3fr,1fr] lg:items-center lg:px-14 lg:py-16"
     >
       <div
         class="pointer-events-none absolute inset-0 bg-gradient-to-b from-bg/0 via-bg/40 to-bg"
@@ -111,12 +112,12 @@ const domainText: Record<
       </div>
       <div class="relative">
         <p class="font-mono text-sm text-accent-bright">DevOps · Infraestrutura em nuvem</p>
-        <h1 class="mt-3 text-3xl font-bold leading-tight text-text sm:text-4xl">
+        <h1 class="mt-3 text-3xl font-bold leading-tight text-text sm:text-4xl lg:text-5xl">
           Construo e mantenho a infraestrutura por trás dos sistemas —{' '}
           <span class="text-accent-bright">e este site é prova disso</span><span
             class="cursor-blink"></span>
         </h1>
-        <p class="mt-4 max-w-md text-muted">
+        <p class="mt-4 max-w-lg text-muted">
           Kubernetes multi-cluster, GitOps, redes seguras e observabilidade. Abaixo, casos reais de
           arquitetura, diagnóstico e decisão técnica.
         </p>
@@ -130,14 +131,14 @@ const domainText: Record<
       <h2 class="font-mono text-sm uppercase tracking-wide text-accent-bright">
         $ ls casos-estudo/
       </h2>
-      <div class="mt-6 grid gap-4 sm:grid-cols-2">
+      <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {projects.map((p) => <ProjectCard {...p} />)}
       </div>
     </section>
 
     <section id="stack" class="mt-24">
       <h2 class="font-mono text-sm uppercase tracking-wide text-accent-bright">$ cat stack.yml</h2>
-      <div class="mt-6 grid gap-4 sm:grid-cols-2">
+      <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {
           stack.map((group) => (
             <div class="rounded-lg border border-border bg-surface p-5">
@@ -161,26 +162,20 @@ const domainText: Record<
 
     <section id="sobre" class="mt-24 border-t border-border pt-12">
       <h2 class="font-mono text-sm uppercase tracking-wide text-accent-bright">$ cat sobre.md</h2>
-      <div class="mt-4 grid gap-8 sm:grid-cols-[1.3fr,1fr]">
+      <div class="mt-6 grid gap-8 lg:grid-cols-[220px,1.2fr,1fr] lg:items-start">
+        <TerminalWindow title="whoami.jpg" class="mx-auto w-40 lg:mx-0 lg:w-full">
+          <Image
+            src={profilePhoto}
+            alt="Foto de Otávio"
+            width={440}
+            height={440}
+            quality={82}
+            class="aspect-square w-full object-cover"
+          />
+        </TerminalWindow>
+
         <div class="space-y-4 text-muted">
-          <div class="flex items-center gap-4">
-            <div
-              class="h-16 w-16 shrink-0 overflow-hidden rounded-lg border border-border sm:h-20 sm:w-20"
-            >
-              <Image
-                src={profilePhoto}
-                alt="Foto de Otávio"
-                width={160}
-                height={160}
-                quality={80}
-                class="h-full w-full object-cover"
-              />
-            </div>
-            <div>
-              <p class="font-mono text-sm text-text">Otávio</p>
-              <p class="font-mono text-xs text-muted">DevOps · Infraestrutura & Segurança</p>
-            </div>
-          </div>
+          <p class="font-mono text-sm text-text">Otávio · DevOps &amp; Infraestrutura</p>
           <p>
             Atuo com DevOps e infraestrutura, gerenciando ambientes Kubernetes multi-cluster (OKE)
             que sustentam múltiplos times e namespaces de produto. Minha rotina passa por GitOps
@@ -197,9 +192,9 @@ const domainText: Record<
             projetos rotulados como "segurança".
           </p>
         </div>
-        <div class="rounded-lg border border-border bg-surface p-5 font-mono text-sm">
-          <p class="text-muted">$ whoami --focos-atuais</p>
-          <ul class="mt-3 space-y-2 text-text">
+
+        <TerminalWindow title="focos.sh" class="font-mono text-sm">
+          <ul class="space-y-2 p-4 text-text">
             <li class="flex gap-2">
               <span class="text-accent-bright">→</span> Padronização de GitOps multi-cluster
             </li>
@@ -213,7 +208,7 @@ const domainText: Record<
               <span class="text-ok">→</span> SLA e observabilidade de suporte
             </li>
           </ul>
-        </div>
+        </TerminalWindow>
       </div>
     </section>
 

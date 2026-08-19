@@ -1,4 +1,6 @@
 ---
+import TerminalWindow from './TerminalWindow.astro';
+
 interface Service {
   name: string;
   detail: string;
@@ -13,16 +15,8 @@ const services: Service[] = [
 ];
 ---
 
-<div
-  class="rounded-lg border border-border bg-surface font-mono text-sm"
-  role="group"
-  aria-label="Áreas de atuação"
->
-  <div class="flex items-center gap-2 border-b border-border px-4 py-3">
-    <span class="status-dot h-2.5 w-2.5 rounded-full bg-ok text-ok" aria-hidden="true"></span>
-    <span class="text-muted">status --areas-de-atuacao</span>
-  </div>
-  <ul class="divide-y divide-border">
+<TerminalWindow title="status.sh" class="font-mono text-sm">
+  <ul class="divide-y divide-border" role="group" aria-label="Áreas de atuação">
     {
       services.map((s) => (
         <li class="flex items-center justify-between px-4 py-3">
@@ -41,4 +35,4 @@ const services: Service[] = [
       ))
     }
   </ul>
-</div>
+</TerminalWindow>

@@ -1,0 +1,20 @@
+---
+interface Props {
+  title: string;
+  class?: string;
+}
+
+const { title, class: className = '' } = Astro.props;
+---
+
+<div class:list={['overflow-hidden rounded-lg border border-border bg-surface', className]}>
+  <div class="flex items-center gap-2 border-b border-border px-4 py-2.5">
+    <span class="h-2.5 w-2.5 rounded-full bg-rose" aria-hidden="true"></span>
+    <span class="h-2.5 w-2.5 rounded-full bg-status" aria-hidden="true"></span>
+    <span class="h-2.5 w-2.5 rounded-full bg-ok" aria-hidden="true"></span>
+    <span class="ml-2 font-mono text-xs text-muted">{title}</span>
+  </div>
+  <div>
+    <slot />
+  </div>
+</div>
