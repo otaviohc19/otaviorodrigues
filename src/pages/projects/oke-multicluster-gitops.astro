@@ -4,20 +4,56 @@ import ProjectLayout from '../../layouts/ProjectLayout.astro';
 
 <ProjectLayout
   title="Multi-cluster OKE com GitOps"
-  description="Arquitetura de múltiplos clusters Kubernetes (OKE) com entrega contínua via ArgoCD."
+  description="Arquitetura de múltiplos clusters Kubernetes (OKE) com entrega contínua via ArgoCD, e um padrão sistemático de diagnóstico de falhas em produção."
+  domain="kubernetes"
+  caseId="02"
 >
   <h2>Contexto</h2>
-  <p>TODO: descreva o cenário — quantos clusters, por que multi-cluster, quem consumia.</p>
-
-  <h2>Abordagem</h2>
-  <p>TODO: GitOps com ArgoCD, Bitbucket Pipelines, padrão de promoção entre ambientes.</p>
-
-  <h2>Desafios técnicos</h2>
   <p>
-    TODO: ex. conflitos de auto-sync por annotations desatualizadas, mismatches de porta entre app e
-    Service/Deployment.
+    Múltiplos times e produtos rodando em clusters OKE separados (produção e homologação/revisão),
+    cada um com vários namespaces (APIs, portal, RPAs, whitelabel). Sem um padrão único de deploy,
+    cada namespace evoluía com práticas próprias — o que dificultava auditoria e tornava incidentes
+    mais lentos de diagnosticar.
   </p>
 
+  <h2>Abordagem</h2>
+  <p>
+    Padronização via GitOps: ArgoCD observando repositórios no Bitbucket, com manifests
+    templatizados (<strong>app.yml.tpl</strong>) versionados por ambiente. O fluxo normal é: fix
+    imediato via <code>kubectl</code> quando algo quebra em produção, seguido de commit da correção no
+    template — garantindo que o próximo <em>sync</em> automático não reintroduza o problema.
+  </p>
+
+  <h2>Diagnóstico sistemático</h2>
+  <p>
+    Com o tempo, um padrão claro de causas-raiz emergiu para os principais estados de falha de pod:
+  </p>
+  <ul>
+    <li>
+      <strong>CrashLoopBackOff / CreateContainerConfigError</strong> — quase sempre ligado a secrets mal
+      formatados (uso de <code>stringData</code> vs. base64 direto, ou newline residual introduzido por
+      <code>echo</code> sem a flag <code>-n</code>).
+    </li>
+    <li>
+      <strong>ImagePullBackOff</strong> — geralmente tag de imagem desatualizada ou token de registry
+      expirado.
+    </li>
+    <li>
+      <strong>Mismatch de porta</strong> — a causa mais recorrente e mais fácil de prevenir: aplicações
+      Node.js expondo 3333 por padrão, .NET expondo 8080, enquanto o Service/Deployment apontava para
+      outra porta. Hoje isso entra como checklist antes de qualquer deploy novo.
+    </li>
+    <li>
+      <strong>Conflitos de auto-sync</strong> — annotations
+      <code>last-applied-configuration</code> desatualizadas fazendo o ArgoCD detectar "drift" onde não
+      havia, exigindo limpeza manual da annotation para o sync estabilizar.
+    </li>
+  </ul>
+
   <h2>Resultado</h2>
-  <p>TODO: tempo de deploy, redução de incidentes, padronização entre times.</p>
+  <p>
+    Redução no tempo médio de diagnóstico de incidentes de deploy, rollback trivial via
+    <code>git revert</code>, e uma trilha de auditoria clara de quem alterou o quê em cada ambiente
+    — algo que a operação manual anterior não oferecia.
+  </p>
 </ProjectLayout>

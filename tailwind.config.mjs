@@ -14,6 +14,8 @@ export default {
         'accent-bright': '#7FB4E3',
         status: '#F2A93B',
         ok: '#5FB878',
+        teal: '#3FA9A4',
+        violet: '#9B8CD9',
       },
       fontFamily: {
         mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],

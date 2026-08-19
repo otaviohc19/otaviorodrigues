@@ -8,6 +8,7 @@ const projects = [
   {
     slug: 'migracao-aws-oci',
     caseId: '01',
+    domain: 'finops' as const,
     title: 'Migração de custos AWS → OCI',
     summary:
       'Análise formal de custos comparando provedores após uma migração, identificando redução estrutural via compute e rede, e um ponto de atenção específico em banco de dados gerenciado.',
@@ -16,28 +17,65 @@ const projects = [
   {
     slug: 'oke-multicluster-gitops',
     caseId: '02',
+    domain: 'kubernetes' as const,
     title: 'Multi-cluster OKE com GitOps',
     summary:
-      'Arquitetura de múltiplos clusters Kubernetes (OKE) com entrega contínua via ArgoCD e Bitbucket Pipelines, incluindo padrões de troubleshooting e recuperação.',
+      'Arquitetura de múltiplos clusters Kubernetes (OKE) com entrega contínua via ArgoCD, incluindo um padrão sistemático de diagnóstico para os erros mais recorrentes em produção.',
     tags: ['Kubernetes', 'ArgoCD', 'CI/CD'],
   },
   {
     slug: 'pki-privada-cert-manager',
     caseId: '03',
+    domain: 'security' as const,
     title: 'PKI privada com cert-manager',
     summary:
-      'Emissão automatizada de certificados internos usando uma CA privada na nuvem integrada ao cert-manager, com notas sobre distribuição de confiança.',
+      'Emissão automatizada de certificados internos usando uma CA privada na nuvem integrada ao cert-manager, com renovação automática e cadeia de confiança corretamente distribuída.',
     tags: ['TLS', 'PKI', 'cert-manager'],
   },
   {
     slug: 'observabilidade-sla',
     caseId: '04',
+    domain: 'observability' as const,
     title: 'Observabilidade e SLA de suporte',
     summary:
-      'Integração de dados de helpdesk via API REST com Grafana para acompanhamento de SLA, com alertas encaminhados para ferramentas de acompanhamento de equipe.',
+      'Integração de dados de helpdesk via API REST com Grafana para acompanhamento de SLA em tempo real, substituindo revisão manual de tickets por alertas automáticos.',
     tags: ['Grafana', 'Zabbix', 'SLA'],
   },
 ];
+
+const stack = [
+  {
+    group: 'Orquestração & GitOps',
+    domain: 'kubernetes' as const,
+    items: ['Kubernetes (OKE)', 'ArgoCD', 'Bitbucket Pipelines', 'Traefik'],
+  },
+  {
+    group: 'Rede',
+    domain: 'network' as const,
+    items: ['WireGuard', 'OCI VCN/NSG', 'FortiClient VPN'],
+  },
+  {
+    group: 'Segurança & PKI',
+    domain: 'security' as const,
+    items: ['cert-manager', 'CA privada (OCI)', 'IAM/Políticas OCI'],
+  },
+  {
+    group: 'Observabilidade',
+    domain: 'observability' as const,
+    items: ['Zabbix', 'Grafana', 'Jira/Teams (alerting)'],
+  },
+];
+
+const domainText: Record<
+  'kubernetes' | 'network' | 'security' | 'observability' | 'finops',
+  string
+> = {
+  kubernetes: 'text-accent-bright',
+  network: 'text-teal',
+  security: 'text-status',
+  observability: 'text-ok',
+  finops: 'text-violet',
+};
 ---
 
 <BaseLayout title="Otávio — DevOps & Infraestrutura em Nuvem">
@@ -70,20 +108,92 @@ const projects = [
 
     <section id="projetos" class="mt-24">
       <h2 class="font-mono text-sm uppercase tracking-wide text-accent-bright">
-        // Casos de estudo
+        $ ls casos-estudo/
       </h2>
       <div class="mt-6 grid gap-4 sm:grid-cols-2">
         {projects.map((p) => <ProjectCard {...p} />)}
       </div>
     </section>
 
+    <section id="stack" class="mt-24">
+      <h2 class="font-mono text-sm uppercase tracking-wide text-accent-bright">$ cat stack.yml</h2>
+      <div class="mt-6 grid gap-4 sm:grid-cols-2">
+        {
+          stack.map((group) => (
+            <div class="rounded-lg border border-border bg-surface p-5">
+              <p
+                class:list={['font-mono text-xs uppercase tracking-wide', domainText[group.domain]]}
+              >
+                {group.group}
+              </p>
+              <ul class="mt-3 flex flex-wrap gap-2">
+                {group.items.map((item) => (
+                  <li class="rounded border border-border px-2 py-1 font-mono text-xs text-muted">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
     <section id="sobre" class="mt-24 border-t border-border pt-12">
-      <h2 class="font-mono text-sm uppercase tracking-wide text-accent-bright">// Sobre</h2>
-      <p class="mt-4 max-w-2xl text-muted">
-        Atuo com DevOps e infraestrutura, gerenciando ambientes Kubernetes multi-cluster (OKE),
-        pipelines de CI/CD e a stack de rede, TLS e observabilidade que sustenta esses ambientes.
-        Atualmente também curso pós-graduação em Cibersegurança.
+      <h2 class="font-mono text-sm uppercase tracking-wide text-accent-bright">$ cat sobre.md</h2>
+      <div class="mt-4 grid gap-8 sm:grid-cols-[1.3fr,1fr]">
+        <div class="space-y-4 text-muted">
+          <p>
+            Atuo com DevOps e infraestrutura, gerenciando ambientes Kubernetes multi-cluster (OKE)
+            que sustentam múltiplos times e namespaces de produto. Minha rotina passa por GitOps
+            (ArgoCD), redes privadas (WireGuard, VCN/NSG), TLS interno via PKI própria e
+            observabilidade (Zabbix/Grafana) — geralmente nessa ordem quando algo quebra em
+            produção.
+          </p>
+          <p>
+            Gosto particularmente da parte de diagnóstico: entender <em class="text-text"
+              >por que</em
+            >{' '}
+            um sistema falhou, não só aplicar o fix. Isso me levou a cursar pós-graduação em Cibersegurança
+            — trago essa lente de ameaça/risco pra decisões de infraestrutura do dia a dia, não só pra
+            projetos rotulados como "segurança".
+          </p>
+        </div>
+        <div class="rounded-lg border border-border bg-surface p-5 font-mono text-sm">
+          <p class="text-muted">$ whoami --focos-atuais</p>
+          <ul class="mt-3 space-y-2 text-text">
+            <li class="flex gap-2">
+              <span class="text-accent-bright">→</span> Padronização de GitOps multi-cluster
+            </li>
+            <li class="flex gap-2">
+              <span class="text-teal">→</span> Hardening de rede interna (WireGuard/NSG)
+            </li>
+            <li class="flex gap-2">
+              <span class="text-status">→</span> PKI privada e ciclo de vida de certificados
+            </li>
+            <li class="flex gap-2">
+              <span class="text-ok">→</span> SLA e observabilidade de suporte
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="contato" class="mt-24 border-t border-border pt-12 text-center">
+      <h2 class="font-mono text-sm uppercase tracking-wide text-accent-bright">
+        $ contato --enviar
+      </h2>
+      <p class="mt-4 text-muted">
+        Aberto a conversas sobre DevOps, infraestrutura em nuvem e segurança.
       </p>
+      <a
+        href="https://www.linkedin.com/in/otaviohcardoso/"
+        class="mt-5 inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-5 py-2.5 font-mono text-sm text-text transition-colors hover:border-accent hover:text-accent-bright"
+        rel="me"
+        target="_blank"
+      >
+        linkedin.com/in/otaviohcardoso ↗
+      </a>
     </section>
   </main>
   <footer class="border-t border-border py-8 text-center font-mono text-xs text-muted">
@@ -93,5 +203,6 @@ const projects = [
     · código-fonte: <a href="https://github.com/otaviohc19/otaviorodrigues" class="hover:text-text"
       >github</a
     >
+    · <a href="https://www.linkedin.com/in/otaviohcardoso/" class="hover:text-text">linkedin</a>
   </footer>
 </BaseLayout>

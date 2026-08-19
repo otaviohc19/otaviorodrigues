@@ -4,20 +4,45 @@ import ProjectLayout from '../../layouts/ProjectLayout.astro';
 
 <ProjectLayout
   title="PKI privada com cert-manager"
-  description="Emissão automatizada de certificados internos com CA privada em nuvem integrada ao cert-manager."
+  description="Emissão automatizada de certificados internos com CA privada em nuvem integrada ao cert-manager, incluindo a distinção entre confiar na raiz e confiar em folhas individuais."
+  domain="security"
+  caseId="03"
 >
   <h2>Contexto</h2>
-  <p>TODO: por que uma CA privada era necessária (domínios internos, sem exposição pública).</p>
+  <p>
+    Serviços internos (em domínios privados, sem exposição pública) precisavam de TLS real, sem
+    depender de certificados autoassinados renovados manualmente — fonte comum de expiração
+    silenciosa e alertas de navegador para quem acessa esses serviços internamente.
+  </p>
 
   <h2>Abordagem</h2>
-  <p>TODO: cert-manager + issuer integrado à CA privada da nuvem, renovação automática.</p>
-
-  <h2>Desafios técnicos</h2>
   <p>
-    TODO: ex. diferença entre importar o certificado raiz da CA vs. certificados-folha individuais
-    no armazenamento de confiança dos navegadores.
+    Configuração de uma CA privada subordinada na nuvem (OCI Certificates), integrada ao{' '}
+    <strong>cert-manager</strong> via um <code>Issuer</code> customizado. A partir disso, qualquer serviço
+    só precisa declarar um <code>Certificate</code> no seu manifesto — emissão e renovação passam a ser
+    automáticas.
+  </p>
+
+  <h2>Desafio técnico principal</h2>
+  <p>
+    O ponto que exigiu mais investigação: importar certificados-folha individuais no repositório de
+    confiança do navegador <em>não</em> estabelece confiança na cadeia como um todo — cada novo serviço
+    gerava um novo alerta de certificado não confiável, mesmo emitido pela mesma CA. A correção foi importar
+    o <strong>certificado raiz da CA</strong> (não os certificados-folha) no repositório de confiança
+    do sistema operacional/navegador, o que resolve para toda a cadeia de uma vez — comportamento esperado
+    de PKI, mas fácil de errar na prática quando não se está pensando em termos de cadeia de confiança.
+  </p>
+  <p>
+    Um segundo problema relacionado: em alguns navegadores, o DNS-over-HTTPS ignorava o resolver
+    interno da VPN para os domínios privados, fazendo a validação de nome falhar mesmo com o
+    certificado correto — resolvido ajustando a configuração de DoH para respeitar o resolver da
+    rede privada nesses domínios.
   </p>
 
   <h2>Resultado</h2>
-  <p>TODO: eliminação de expiração manual de certificados, padronização de TLS interno.</p>
+  <p>
+    Eliminação de expiração manual de certificados internos e padronização de TLS em todos os
+    serviços privados, com um único ponto de configuração (o <code>Issuer</code>) para toda a
+    infraestrutura.
+  </p>
 </ProjectLayout>

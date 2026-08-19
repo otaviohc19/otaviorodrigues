@@ -4,17 +4,48 @@ import ProjectLayout from '../../layouts/ProjectLayout.astro';
 
 <ProjectLayout
   title="Observabilidade e SLA de suporte"
-  description="Integração de dados de helpdesk via API REST com Grafana para acompanhamento de SLA."
+  description="Integração de dados de helpdesk via API REST com Grafana para acompanhamento de SLA em tempo real, substituindo revisão manual de tickets."
+  domain="observability"
+  caseId="04"
 >
   <h2>Contexto</h2>
-  <p>TODO: necessidade de visibilidade sobre SLA de atendimento do setor de suporte.</p>
+  <p>
+    O setor de suporte não tinha visibilidade em tempo real sobre cumprimento de SLA — o
+    acompanhamento dependia de revisão manual de tickets no sistema de helpdesk, o que atrasava a
+    percepção de violações até que já tivessem impacto no cliente.
+  </p>
 
   <h2>Abordagem</h2>
-  <p>TODO: consumo da API REST do sistema de helpdesk, modelagem de painéis no Grafana, alertas.</p>
+  <p>
+    Consumo da API REST do sistema de helpdesk (GLPI) para extrair dados de tickets — abertura,
+    mudanças de status, prioridade, tempo de primeira resposta e tempo de resolução — e modelagem de
+    painéis no Grafana com esses dados. Alertas de violação de SLA passaram a ser encaminhados
+    automaticamente para Jira e Microsoft Teams, no mesmo fluxo que já era usado para alertas de
+    infraestrutura vindos do Zabbix.
+  </p>
 
   <h2>Desafios técnicos</h2>
-  <p>TODO: ex. normalização de dados vindos da API, definição de métricas de SLA relevantes.</p>
+  <ul>
+    <li>
+      <strong>Normalização de dados</strong> — tickets antigos tinham campos de status inconsistentes
+      ou timestamps de transição faltantes, exigindo tratamento antes de alimentar os painéis.
+    </li>
+    <li>
+      <strong>Definição de métricas relevantes</strong> — nem todo ticket tem o mesmo peso; foi necessário
+      segmentar métricas de SLA por nível de prioridade em vez de usar uma média geral, que escondia violações
+      em tickets críticos.
+    </li>
+    <li>
+      <strong>Evitar fadiga de alerta</strong> — os primeiros alertas automáticos geravam ruído demais;
+      os limiares foram ajustados para disparar só perto do limite real de SLA, não a cada mudança de
+      status.
+    </li>
+  </ul>
 
   <h2>Resultado</h2>
-  <p>TODO: visibilidade de SLA em tempo real, redução de tempo de resposta a violações.</p>
+  <p>
+    Visibilidade de SLA em tempo real para a liderança do suporte, com alertas automáticos
+    substituindo a revisão manual, e dados históricos consistentes o suficiente para conversas
+    orientadas por dado sobre dimensionamento de equipe.
+  </p>
 </ProjectLayout>
