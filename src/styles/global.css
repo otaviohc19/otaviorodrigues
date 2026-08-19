@@ -16,7 +16,10 @@
   }
 
   body {
-    @apply bg-bg text-text font-sans antialiased;
+    @apply text-text font-sans antialiased;
+    background: linear-gradient(180deg, #0b0f14 0%, #0e131a 35%, #121a24 70%, #17212d 100%);
+    background-attachment: scroll;
+    min-height: 100vh;
   }
 
   /* Foco de teclado visível — acessibilidade, não decoração */

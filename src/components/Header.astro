@@ -1,48 +1,119 @@
 ---
 const base = import.meta.env.BASE_URL;
+
+const links = [
+  { href: `${base}#projetos`, label: 'projetos', external: false },
+  { href: `${base}#stack`, label: 'stack', external: false },
+  { href: `${base}#sobre`, label: 'sobre', external: false },
+  { href: `${base}#contato`, label: 'contato', external: false },
+  { href: 'https://github.com/otaviohc19', label: 'github', external: true },
+  { href: 'https://www.linkedin.com/in/otaviohcardoso/', label: 'linkedin', external: true },
+];
 ---
 
 <header class="border-b border-border/80">
-  <nav class="mx-auto flex max-w-4xl items-center justify-between px-6 py-5">
+  <nav class="mx-auto flex max-w-4xl items-center justify-between px-6 py-4 sm:py-5">
     <a href={base} class="font-mono text-sm text-text transition-colors hover:text-accent-bright">
       ~/otavio<span class="text-accent-bright">$</span>
     </a>
-    <ul class="flex gap-6 font-mono text-sm">
-      <li>
-        <a
-          href={`${base}#projetos`}
-          class="text-muted decoration-accent-bright/70 underline-offset-4 transition-colors hover:text-text hover:underline"
-        >
-          projetos
-        </a>
-      </li>
-      <li>
-        <a
-          href={`${base}#sobre`}
-          class="text-muted decoration-accent-bright/70 underline-offset-4 transition-colors hover:text-text hover:underline"
-        >
-          sobre
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://github.com/otaviohc19"
-          class="text-muted decoration-accent-bright/70 underline-offset-4 transition-colors hover:text-text hover:underline"
-          rel="me"
-        >
-          github
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://www.linkedin.com/in/otaviohcardoso/"
-          class="text-muted decoration-accent-bright/70 underline-offset-4 transition-colors hover:text-text hover:underline"
-          rel="me"
-          target="_blank"
-        >
-          linkedin
-        </a>
-      </li>
+
+    <!-- Nav desktop -->
+    <ul class="hidden gap-6 font-mono text-sm sm:flex">
+      {
+        links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              rel={link.external ? 'me' : undefined}
+              target={link.external ? '_blank' : undefined}
+              class="text-muted decoration-accent-bright/70 underline-offset-4 transition-colors hover:text-text hover:underline"
+            >
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
     </ul>
+
+    <!-- Botão hambúrguer (só mobile) -->
+    <button
+      id="nav-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+      aria-label="Abrir menu"
+      class="-mr-2 flex h-10 w-10 items-center justify-center text-text sm:hidden"
+    >
+      <svg
+        id="icon-open"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.75"
+        class="h-5 w-5"
+      >
+        <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+      <svg
+        id="icon-close"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.75"
+        class="hidden h-5 w-5"
+      >
+        <path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"></path>
+      </svg>
+    </button>
   </nav>
+
+  <!-- Nav mobile (colapsável) -->
+  <ul
+    id="mobile-nav"
+    class="hidden flex-col gap-1 border-t border-border/80 px-6 py-3 font-mono text-sm sm:hidden"
+  >
+    {
+      links.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            rel={link.external ? 'me' : undefined}
+            target={link.external ? '_blank' : undefined}
+            class="block rounded px-2 py-2.5 text-muted transition-colors hover:bg-surface hover:text-text"
+          >
+            {link.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
 </header>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const menu = document.getElementById('mobile-nav');
+  const iconOpen = document.getElementById('icon-open');
+  const iconClose = document.getElementById('icon-close');
+
+  toggle?.addEventListener('click', () => {
+    const isOpen = menu?.classList.contains('flex');
+    menu?.classList.toggle('hidden');
+    menu?.classList.toggle('flex');
+    iconOpen?.classList.toggle('hidden');
+    iconClose?.classList.toggle('hidden');
+    toggle.setAttribute('aria-expanded', String(!isOpen));
+  });
+
+  // Fecha o menu ao navegar para uma âncora da própria página
+  menu?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      menu.classList.add('hidden');
+      menu.classList.remove('flex');
+      iconOpen?.classList.remove('hidden');
+      iconClose?.classList.add('hidden');
+      toggle?.setAttribute('aria-expanded', 'false');
+    });
+  });
+</script>
