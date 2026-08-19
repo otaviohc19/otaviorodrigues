@@ -4,22 +4,29 @@ interface Props {
   title: string;
   summary: string;
   tags: string[];
+  caseId: string;
 }
 
-const { slug, title, summary, tags } = Astro.props;
+const { slug, title, summary, tags, caseId } = Astro.props;
 const base = import.meta.env.BASE_URL;
 ---
 
 <a
   href={`${base}projects/${slug}/`}
-  class="group block rounded-lg border border-border bg-surface p-6 transition-colors hover:border-accent hover:bg-surface-hover"
+  class="group relative block overflow-hidden rounded-lg border border-border bg-surface p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-accent hover:bg-surface-hover hover:shadow-lg hover:shadow-black/30"
 >
-  <h3 class="font-mono text-base text-text group-hover:text-accent-bright">{title}</h3>
+  <span
+    class="absolute inset-y-0 left-0 w-0.5 bg-accent opacity-0 transition-opacity group-hover:opacity-100"
+    aria-hidden="true"></span>
+  <p class="font-mono text-xs tracking-wide text-muted/80">case://{caseId}</p>
+  <h3 class="mt-2 font-mono text-base text-text group-hover:text-accent-bright">{title}</h3>
   <p class="mt-2 text-sm leading-relaxed text-muted">{summary}</p>
   <ul class="mt-4 flex flex-wrap gap-2">
     {
       tags.map((tag) => (
-        <li class="rounded border border-border px-2 py-0.5 font-mono text-xs text-muted">{tag}</li>
+        <li class="rounded border border-border px-2 py-0.5 font-mono text-xs text-accent-bright/90">
+          {tag}
+        </li>
       ))
     }
   </ul>

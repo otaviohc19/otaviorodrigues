@@ -9,8 +9,32 @@ updates:
       minor-and-patch:
         patterns: ['*']
         update-types: ['minor', 'patch']
+    ignore:
+      # Major versions desses pacotes tendem a exigir migração manual
+      # (mudança de config, formato de arquivo, breaking changes de API).
+      # Continuamos recebendo PRs de minor/patch normalmente.
+      - dependency-name: 'astro'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'eslint'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'eslint-plugin-astro'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'tailwindcss'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'typescript'
+        update-types: ['version-update:semver-major']
+      - dependency-name: '@astrojs/tailwind'
+        update-types: ['version-update:semver-major']
 
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
       interval: 'weekly'
+    ignore:
+      # actions/download-artifact e upload-artifact mudaram o formato de
+      # armazenamento entre major versions (v4 -> v8) — atualizar exige
+      # revisar o restante do workflow antes de aceitar.
+      - dependency-name: 'actions/download-artifact'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'actions/upload-artifact'
+        update-types: ['version-update:semver-major']

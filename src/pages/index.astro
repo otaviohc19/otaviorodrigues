@@ -7,6 +7,7 @@ import ProjectCard from '../components/ProjectCard.astro';
 const projects = [
   {
     slug: 'migracao-aws-oci',
+    caseId: '01',
     title: 'Migração de custos AWS → OCI',
     summary:
       'Análise formal de custos comparando provedores após uma migração, identificando redução estrutural via compute e rede, e um ponto de atenção específico em banco de dados gerenciado.',
@@ -14,6 +15,7 @@ const projects = [
   },
   {
     slug: 'oke-multicluster-gitops',
+    caseId: '02',
     title: 'Multi-cluster OKE com GitOps',
     summary:
       'Arquitetura de múltiplos clusters Kubernetes (OKE) com entrega contínua via ArgoCD e Bitbucket Pipelines, incluindo padrões de troubleshooting e recuperação.',
@@ -21,6 +23,7 @@ const projects = [
   },
   {
     slug: 'pki-privada-cert-manager',
+    caseId: '03',
     title: 'PKI privada com cert-manager',
     summary:
       'Emissão automatizada de certificados internos usando uma CA privada na nuvem integrada ao cert-manager, com notas sobre distribuição de confiança.',
@@ -28,6 +31,7 @@ const projects = [
   },
   {
     slug: 'observabilidade-sla',
+    caseId: '04',
     title: 'Observabilidade e SLA de suporte',
     summary:
       'Integração de dados de helpdesk via API REST com Grafana para acompanhamento de SLA, com alertas encaminhados para ferramentas de acompanhamento de equipe.',
@@ -39,32 +43,42 @@ const projects = [
 <BaseLayout title="Otávio — DevOps & Infraestrutura em Nuvem">
   <Header />
   <main id="conteudo" class="mx-auto max-w-4xl px-6 py-16">
-    <section class="grid gap-10 sm:grid-cols-[1.1fr,1fr] sm:items-center">
-      <div>
+    <section
+      class="relative grid gap-10 overflow-hidden rounded-xl border border-border/60 bg-grid-dots px-6 py-10 sm:grid-cols-[1.1fr,1fr] sm:items-center sm:px-10"
+    >
+      <div
+        class="pointer-events-none absolute inset-0 bg-gradient-to-b from-bg/0 via-bg/40 to-bg"
+        aria-hidden="true"
+      >
+      </div>
+      <div class="relative">
         <p class="font-mono text-sm text-accent-bright">DevOps · Infraestrutura em nuvem</p>
-        <h1 class="mt-3 text-3xl font-semibold leading-tight text-text sm:text-4xl">
-          Construo e mantenho a infraestrutura por trás dos sistemas — <br
-            class="hidden sm:block"
-          />
-          e este site é prova disso.
+        <h1 class="mt-3 text-3xl font-bold leading-tight text-text sm:text-4xl">
+          Construo e mantenho a infraestrutura por trás dos sistemas —{' '}
+          <span class="text-accent-bright">e este site é prova disso</span><span
+            class="cursor-blink"></span>
         </h1>
-        <p class="mt-4 text-muted">
+        <p class="mt-4 max-w-md text-muted">
           Kubernetes multi-cluster, GitOps, redes seguras e observabilidade. Abaixo, casos reais de
           arquitetura, diagnóstico e decisão técnica.
         </p>
       </div>
-      <StatusPanel />
+      <div class="relative">
+        <StatusPanel />
+      </div>
     </section>
 
-    <section id="projetos" class="mt-20">
-      <h2 class="font-mono text-sm uppercase tracking-wide text-muted">Casos de estudo</h2>
+    <section id="projetos" class="mt-24">
+      <h2 class="font-mono text-sm uppercase tracking-wide text-accent-bright">
+        // Casos de estudo
+      </h2>
       <div class="mt-6 grid gap-4 sm:grid-cols-2">
         {projects.map((p) => <ProjectCard {...p} />)}
       </div>
     </section>
 
-    <section id="sobre" class="mt-20 border-t border-border pt-12">
-      <h2 class="font-mono text-sm uppercase tracking-wide text-muted">Sobre</h2>
+    <section id="sobre" class="mt-24 border-t border-border pt-12">
+      <h2 class="font-mono text-sm uppercase tracking-wide text-accent-bright">// Sobre</h2>
       <p class="mt-4 max-w-2xl text-muted">
         Atuo com DevOps e infraestrutura, gerenciando ambientes Kubernetes multi-cluster (OKE),
         pipelines de CI/CD e a stack de rede, TLS e observabilidade que sustenta esses ambientes.
