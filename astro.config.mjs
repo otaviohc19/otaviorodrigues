@@ -8,7 +8,7 @@ import tailwind from '@astrojs/tailwind';
 // Se você usar um domínio customizado (via CNAME), 'base' deve ser '/'.
 export default defineConfig({
   site: 'https://otaviohc19.github.io',
-  base: '/otaviorodrigues',
+  base: '/otaviorodrigues/',
   integrations: [tailwind()],
   build: {
     format: 'directory',
