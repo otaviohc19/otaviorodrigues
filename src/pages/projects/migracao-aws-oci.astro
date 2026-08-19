@@ -1,0 +1,43 @@
+---
+import ProjectLayout from '../../layouts/ProjectLayout.astro';
+---
+
+<ProjectLayout
+  title="Migração de custos AWS → OCI"
+  description="Análise formal de custos comparando AWS e OCI após migração de infraestrutura, com foco em compute, rede e banco de dados gerenciado."
+>
+  <h2>Contexto</h2>
+  <p>
+    Após a migração da infraestrutura de um provedor cloud para outro, foi necessário formalizar uma
+    análise comparativa de custos para validar a decisão junto à liderança técnica — não apenas
+    confirmar economia, mas identificar onde ela realmente vinha, e onde o novo provedor custava
+    mais.
+  </p>
+
+  <h2>Abordagem</h2>
+  <p>
+    Levantamento item a item dos custos recorrentes (compute, rede/egress, armazenamento, banco de
+    dados gerenciado) nos dois provedores, normalizado por carga de trabalho equivalente, para
+    evitar comparar "maçãs com peras" entre SKUs diferentes.
+  </p>
+
+  <h2>Achados</h2>
+  <p>
+    Redução estrutural de custo, majoritariamente explicada por compute e rede — os dois itens que
+    pesavam mais no provedor anterior. Uma exceção notável: o serviço de banco de dados gerenciado
+    (MySQL HeatWave) mostrou custo mais alto que o equivalente anterior, o que exigiu investigação
+    separada sobre modelo de billing e OCIDs cobrados.
+  </p>
+
+  <h2>Resultado</h2>
+  <p>
+    Documento de análise usado para validar a migração já concluída e para orientar decisões futuras
+    de dimensionamento — deixando claro para a liderança onde a economia é estrutural e onde exige
+    atenção contínua.
+  </p>
+
+  <p class="pt-4 text-sm text-muted/80">
+    <strong>Nota:</strong> valores e nomes de sistemas foram omitidos por confidencialidade. Disponível
+    para detalhar a metodologia em entrevista.
+  </p>
+</ProjectLayout>

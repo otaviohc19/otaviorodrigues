@@ -1,0 +1,44 @@
+---
+interface Service {
+  name: string;
+  detail: string;
+  status: 'operational' | 'monitoring';
+}
+
+const services: Service[] = [
+  { name: 'kubernetes-gitops', detail: 'OKE multi-cluster · ArgoCD', status: 'operational' },
+  { name: 'networking-vpn', detail: 'WireGuard · NSG · roteamento', status: 'operational' },
+  { name: 'pki-tls', detail: 'cert-manager · CA privada', status: 'operational' },
+  { name: 'observability', detail: 'Zabbix · Grafana · SLA', status: 'operational' },
+];
+---
+
+<div
+  class="rounded-lg border border-border bg-surface font-mono text-sm"
+  role="group"
+  aria-label="Áreas de atuação"
+>
+  <div class="flex items-center gap-2 border-b border-border px-4 py-3">
+    <span class="h-2.5 w-2.5 rounded-full bg-ok" aria-hidden="true"></span>
+    <span class="text-muted">status --areas-de-atuacao</span>
+  </div>
+  <ul class="divide-y divide-border">
+    {
+      services.map((s) => (
+        <li class="flex items-center justify-between px-4 py-3">
+          <div class="flex items-center gap-3">
+            <span
+              class:list={[
+                'h-2 w-2 rounded-full',
+                s.status === 'operational' ? 'bg-ok' : 'bg-status',
+              ]}
+              aria-hidden="true"
+            />
+            <span class="text-text">{s.name}</span>
+          </div>
+          <span class="text-muted text-xs sm:text-sm">{s.detail}</span>
+        </li>
+      ))
+    }
+  </ul>
+</div>

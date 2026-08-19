@@ -1,0 +1,18 @@
+---
+const base = import.meta.env.BASE_URL;
+---
+
+<header class="border-b border-border">
+  <nav class="mx-auto flex max-w-4xl items-center justify-between px-6 py-5">
+    <a href={base} class="font-mono text-sm text-text hover:text-accent-bright">
+      ~/otavio<span class="text-accent-bright">$</span>
+    </a>
+    <ul class="flex gap-6 font-mono text-sm text-muted">
+      <li><a href={`${base}#projetos`} class="hover:text-text">projetos</a></li>
+      <li><a href={`${base}#sobre`} class="hover:text-text">sobre</a></li>
+      <li>
+        <a href="https://github.com/otaviohc19" class="hover:text-text" rel="me">github</a>
+      </li>
+    </ul>
+  </nav>
+</header>

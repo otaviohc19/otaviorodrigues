@@ -1,0 +1,23 @@
+---
+import ProjectLayout from '../../layouts/ProjectLayout.astro';
+---
+
+<ProjectLayout
+  title="PKI privada com cert-manager"
+  description="Emissão automatizada de certificados internos com CA privada em nuvem integrada ao cert-manager."
+>
+  <h2>Contexto</h2>
+  <p>TODO: por que uma CA privada era necessária (domínios internos, sem exposição pública).</p>
+
+  <h2>Abordagem</h2>
+  <p>TODO: cert-manager + issuer integrado à CA privada da nuvem, renovação automática.</p>
+
+  <h2>Desafios técnicos</h2>
+  <p>
+    TODO: ex. diferença entre importar o certificado raiz da CA vs. certificados-folha individuais
+    no armazenamento de confiança dos navegadores.
+  </p>
+
+  <h2>Resultado</h2>
+  <p>TODO: eliminação de expiração manual de certificados, padronização de TLS interno.</p>
+</ProjectLayout>
