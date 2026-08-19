@@ -18,5 +18,9 @@ module.exports = {
         extraFileExtensions: ['.astro'],
       },
     },
+    {
+      files: ['public/**/*.js'],
+      env: { browser: true, node: false },
+    },
   ],
 };
