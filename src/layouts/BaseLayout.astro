@@ -20,6 +20,8 @@ const withoutLangPrefix = isEnglish ? relative.replace(/^en\/?/, '') : relative;
 const htmlLang = isEnglish ? 'en' : 'pt-BR';
 const ptHref = `${base}${withoutLangPrefix}`;
 const enHref = `${base}en/${withoutLangPrefix}`;
+const ptAbsolute = new URL(ptHref, Astro.site).href;
+const enAbsolute = new URL(enHref, Astro.site).href;
 const skipLinkLabel = isEnglish ? 'Skip to content' : 'Ir para o conteúdo';
 ---
 
@@ -32,8 +34,10 @@ const skipLinkLabel = isEnglish ? 'Skip to content' : 'Ir para o conteúdo';
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="alternate" hreflang="pt-BR" href={ptHref} />
-    <link rel="alternate" hreflang="en" href={enHref} />
+    <link rel="canonical" href={isEnglish ? enAbsolute : ptAbsolute} />
+    <link rel="alternate" hreflang="pt-BR" href={ptAbsolute} />
+    <link rel="alternate" hreflang="en" href={enAbsolute} />
+    <link rel="alternate" hreflang="x-default" href={ptAbsolute} />
 
     <!--
       CSP via meta tag: opção disponível no GitHub Pages, já que não há
