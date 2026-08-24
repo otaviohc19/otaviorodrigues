@@ -1,0 +1,49 @@
+---
+import ProjectLayout from '../../../layouts/ProjectLayout.astro';
+---
+
+<ProjectLayout
+  title="Private PKI and certificate lifecycle"
+  description="Automated issuance and renewal of internal certificates via a private CA, with the trust chain correctly distributed across environments."
+  domain="security"
+  caseId="04"
+>
+  <h2>Context</h2>
+  <p>
+    Internal services, on private domains with no public exposure, needed real TLS — without relying
+    on manually renewed self-signed certificates, a common source of silent expiration and browser
+    warnings for anyone accessing these services day to day.
+  </p>
+
+  <h2>Approach</h2>
+  <p>
+    Establishing a <strong>private certificate authority</strong> in the cloud, with certificate issuance
+    and renewal automated via orchestration tooling (in this case,{' '}
+    <code>cert-manager</code> on Kubernetes) — the service only needs to declare that it needs a certificate;
+    the entire lifecycle becomes automatic.
+  </p>
+
+  <h2>The point that matters most</h2>
+  <p>
+    The technical detail that required the most investigation, and generalizes to any private PKI:
+    importing individual leaf certificates into a browser's or system's trust store does{' '}
+    <em>not</em> establish trust for the chain as a whole — every new service generated a new untrusted-certificate
+    warning, even though it was issued by the same CA. The correct fix is to import the <strong
+      >CA's root certificate</strong
+    > into the trust store, which resolves it for the entire chain at once. It's expected PKI behavior,
+    but easy to get wrong in practice when you're not explicitly thinking in terms of the trust chain.
+  </p>
+  <p>
+    A second, more environment-specific problem: in some browsers, DNS-over-HTTPS ignored the
+    private network's internal resolver, causing name validation to fail even with the correct
+    certificate — fixed by adjusting the DoH configuration to respect the private network's resolver
+    for those domains.
+  </p>
+
+  <h2>Result</h2>
+  <p>
+    Elimination of manual internal certificate expiration and TLS standardization across all private
+    services, with a single configuration point for the entire infrastructure — the kind of decision
+    that only needs to be thoroughly investigated once, then replicates with no additional effort.
+  </p>
+</ProjectLayout>

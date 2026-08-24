@@ -1,0 +1,65 @@
+---
+import ProjectLayout from '../../../layouts/ProjectLayout.astro';
+import CaseImage from '../../../components/CaseImage.astro';
+import okeDashboard from '../../../assets/case-studies/oke-dashboard.png';
+---
+
+<ProjectLayout
+  title="Multi-cluster OKE with GitOps"
+  description="Multi-cluster Kubernetes (OKE) architecture with continuous delivery via ArgoCD, and a systematic diagnostic pattern for production failures."
+  domain="kubernetes"
+  caseId="02"
+>
+  <h2>Context</h2>
+  <p>
+    Multiple teams and products running on separate OKE clusters (production and staging/review),
+    each with several namespaces (APIs, portal, RPAs, whitelabel). Without a single deployment
+    standard, each namespace evolved with its own practices — which made auditing harder and slowed
+    down incident diagnosis.
+  </p>
+
+  <h2>Approach</h2>
+  <p>
+    Standardization via GitOps: ArgoCD watching repositories on Bitbucket, with templated manifests
+    (<strong>app.yml.tpl</strong>) versioned per environment. The normal flow is: an immediate fix
+    via <code>kubectl</code> when something breaks in production, followed by committing the fix to the
+    template — ensuring the next automatic <em>sync</em> doesn't reintroduce the problem.
+  </p>
+
+  <h2>Systematic diagnosis</h2>
+  <p>Over time, a clear root-cause pattern emerged for the main pod failure states:</p>
+  <ul>
+    <li>
+      <strong>CrashLoopBackOff / CreateContainerConfigError</strong> — almost always tied to malformed
+      secrets (using <code>stringData</code> vs. direct base64, or a residual newline introduced by <code
+        >echo</code
+      > without the <code>-n</code> flag).
+    </li>
+    <li>
+      <strong>ImagePullBackOff</strong> — usually an outdated image tag or an expired registry token.
+    </li>
+    <li>
+      <strong>Port mismatch</strong> — the most recurring and easiest-to-prevent cause: Node.js apps defaulting
+      to port 3333, .NET defaulting to 8080, while the Service/Deployment pointed to a different port.
+      Today this is part of a checklist before any new deploy.
+    </li>
+    <li>
+      <strong>Auto-sync conflicts</strong> — stale <code>last-applied-configuration</code>{' '}
+      annotations causing ArgoCD to detect "drift" where there wasn't any, requiring manual annotation
+      cleanup for the sync to stabilize.
+    </li>
+  </ul>
+
+  <CaseImage
+    src={okeDashboard}
+    alt="Grafana dashboard showing running pods, pending pods, failed pods, and CPU/memory usage per node and per namespace on an OKE cluster"
+    caption="Grafana dashboard consuming cluster metrics — running/failed pods, resource usage per node and per namespace. Internal identifiers have been removed."
+  />
+
+  <h2>Result</h2>
+  <p>
+    Reduced average diagnosis time for deployment incidents, trivial rollback via{' '}
+    <code>git revert</code>, and a clear audit trail of who changed what in each environment —
+    something the previous manual operation didn't offer.
+  </p>
+</ProjectLayout>

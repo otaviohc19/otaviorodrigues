@@ -1,0 +1,56 @@
+---
+import ProjectLayout from '../../../layouts/ProjectLayout.astro';
+import CaseImage from '../../../components/CaseImage.astro';
+import zabbixMonitoring from '../../../assets/case-studies/zabbix-monitoring.png';
+---
+
+<ProjectLayout
+  title="Observability and support SLA"
+  description="REST API integration between the helpdesk system and Grafana for real-time SLA tracking, replacing manual ticket review."
+  domain="observability"
+  caseId="05"
+>
+  <h2>Context</h2>
+  <p>
+    The support team had no real-time visibility into SLA compliance — tracking relied on manual
+    ticket review in the helpdesk system, which delayed awareness of violations until they had
+    already impacted the customer.
+  </p>
+
+  <h2>Approach</h2>
+  <p>
+    Consuming the helpdesk system's (GLPI) REST API to extract ticket data — opening time, status
+    changes, priority, first-response time, and resolution time — and modeling Grafana dashboards
+    with that data. SLA violation alerts were automatically routed to Jira and Microsoft Teams,
+    reusing the same flow already used for infrastructure alerts coming from Zabbix.
+  </p>
+
+  <CaseImage
+    src={zabbixMonitoring}
+    alt="List of monitored items in Zabbix for a host, showing CPU, memory, swap, and filesystem metrics with real-time values"
+    caption="Monitored items in Zabbix — the same infrastructure alerting layer repurposed to feed the SLA pipeline. Hostname removed."
+  />
+
+  <h2>Technical challenges</h2>
+  <ul>
+    <li>
+      <strong>Data normalization</strong> — older tickets had inconsistent status fields or missing transition
+      timestamps, requiring cleanup before feeding the dashboards.
+    </li>
+    <li>
+      <strong>Defining relevant metrics</strong> — not every ticket carries the same weight; SLA metrics
+      had to be segmented by priority level instead of using a general average, which masked violations
+      in critical tickets.
+    </li>
+    <li>
+      <strong>Avoiding alert fatigue</strong> — the first automated alerts generated too much noise; thresholds
+      were tuned to trigger only close to the actual SLA limit, not on every status change.
+    </li>
+  </ul>
+
+  <h2>Result</h2>
+  <p>
+    Real-time SLA visibility for support leadership, with automated alerts replacing manual review,
+    and historical data consistent enough for data-driven conversations about staffing.
+  </p>
+</ProjectLayout>

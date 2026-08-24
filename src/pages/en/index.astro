@@ -1,0 +1,256 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import StatusPanel from '../../components/StatusPanel.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { Image } from 'astro:assets';
+import profilePhoto from '../../assets/profile.jpg';
+import TerminalWindow from '../../components/TerminalWindow.astro';
+
+const base = import.meta.env.BASE_URL;
+
+const projects = [
+  {
+    slug: 'infraestrutura-hibrida-aws-oci',
+    caseId: '01',
+    domain: 'cloud' as const,
+    title: 'Hybrid infrastructure: AWS and OCI',
+    summary:
+      'Infrastructure architecture running across two cloud providers, covering networking and compute decisions plus the cost analysis behind the migration.',
+    tags: ['AWS', 'OCI', 'Multi-cloud'],
+  },
+  {
+    slug: 'oke-multicluster-gitops',
+    caseId: '02',
+    domain: 'kubernetes' as const,
+    title: 'Multi-cluster OKE with GitOps',
+    summary:
+      'Multi-cluster Kubernetes (OKE) architecture with continuous delivery via ArgoCD, including a systematic diagnostic pattern for the most recurring production errors.',
+    tags: ['Kubernetes', 'ArgoCD', 'CI/CD'],
+  },
+  {
+    slug: 'rede-privada-multicluster',
+    caseId: '03',
+    domain: 'network' as const,
+    title: 'Private networking across environments',
+    summary:
+      'WireGuard tunnels and corporate VPN connecting distinct clusters and environments, with routing, MTU, and cloud firewall-layer diagnostics.',
+    tags: ['WireGuard', 'VPN', 'OCI NSG'],
+  },
+  {
+    slug: 'pki-privada-cert-manager',
+    caseId: '04',
+    domain: 'security' as const,
+    title: 'Private PKI and certificate lifecycle',
+    summary:
+      'Automated issuance and renewal of internal certificates via a private CA, with the trust chain correctly distributed across environments.',
+    tags: ['PKI', 'TLS', 'Security'],
+  },
+  {
+    slug: 'observabilidade-sla',
+    caseId: '05',
+    domain: 'observability' as const,
+    title: 'Observability and support SLA',
+    summary:
+      'REST API integration between the helpdesk system and Grafana for real-time SLA tracking, replacing manual ticket review.',
+    tags: ['Grafana', 'Zabbix', 'SLA'],
+  },
+  {
+    slug: 'seguranca-pipeline-portfolio',
+    caseId: '06',
+    domain: 'security' as const,
+    title: 'Applied security: this portfolio\u2019s own pipeline',
+    summary:
+      'How a Cybersecurity lens translates into practice: SAST, secret scanning, SBOM, and CSP applied to the very repository behind this site.',
+    tags: ['SAST', 'CI/CD', 'CSP'],
+  },
+];
+
+const stack = [
+  {
+    group: 'Orchestration & GitOps',
+    domain: 'kubernetes' as const,
+    items: ['Kubernetes (OKE)', 'ArgoCD', 'Bitbucket Pipelines', 'Traefik'],
+  },
+  {
+    group: 'Networking',
+    domain: 'network' as const,
+    items: ['WireGuard', 'OCI VCN/NSG', 'FortiClient VPN'],
+  },
+  {
+    group: 'Security & PKI',
+    domain: 'security' as const,
+    items: ['cert-manager', 'Private CA (OCI)', 'OCI IAM Policies'],
+  },
+  {
+    group: 'Observability',
+    domain: 'observability' as const,
+    items: ['Zabbix', 'Grafana', 'Jira/Teams (alerting)'],
+  },
+];
+
+const domainText: Record<
+  'kubernetes' | 'network' | 'security' | 'observability' | 'cloud',
+  string
+> = {
+  kubernetes: 'text-accent-bright',
+  network: 'text-teal',
+  security: 'text-status',
+  observability: 'text-ok',
+  cloud: 'text-rose',
+};
+
+const statusServices = [
+  {
+    name: 'kubernetes-gitops',
+    detail: 'OKE multi-cluster · ArgoCD',
+    status: 'operational' as const,
+  },
+  { name: 'networking-vpn', detail: 'WireGuard · NSG · routing', status: 'operational' as const },
+  { name: 'pki-tls', detail: 'cert-manager · private CA', status: 'operational' as const },
+  { name: 'observability', detail: 'Zabbix · Grafana · SLA', status: 'operational' as const },
+];
+---
+
+<BaseLayout title="Otávio — DevOps & Cloud Infrastructure">
+  <Header />
+  <main id="conteudo" class="mx-auto max-w-6xl px-6 py-16">
+    <section
+      class="relative grid gap-10 overflow-hidden rounded-xl border border-border/60 bg-grid-dots px-6 py-10 sm:px-10 lg:grid-cols-[1.3fr,1fr] lg:items-center lg:px-14 lg:py-16"
+    >
+      <div
+        class="pointer-events-none absolute inset-0 bg-gradient-to-b from-bg/0 via-bg/40 to-bg"
+        aria-hidden="true"
+      >
+      </div>
+      <div class="relative">
+        <p class="font-mono text-sm text-accent-bright">DevOps · Cloud Infrastructure</p>
+        <h1 class="mt-3 text-3xl font-bold leading-tight text-text sm:text-4xl lg:text-5xl">
+          I build and run the infrastructure behind the systems —{' '}
+          <span class="text-accent-bright">and this site is proof of it</span><span
+            class="cursor-blink"></span>
+        </h1>
+        <p class="mt-4 max-w-lg text-muted">
+          Multi-cluster Kubernetes, GitOps, secure networking, and observability. Below, real cases
+          of architecture, diagnostics, and technical decisions.
+        </p>
+      </div>
+      <div class="relative">
+        <StatusPanel services={statusServices} />
+      </div>
+    </section>
+
+    <section id="projetos" class="mt-24">
+      <h2 class="font-mono text-sm uppercase tracking-wide text-accent-bright">
+        $ ls case-studies/
+      </h2>
+      <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          projects.map((p) => (
+            <ProjectCard {...p} href={`${base}en/projects/${p.slug}/`} ctaLabel="view full case" />
+          ))
+        }
+      </div>
+    </section>
+
+    <section id="stack" class="mt-24">
+      <h2 class="font-mono text-sm uppercase tracking-wide text-accent-bright">$ cat stack.yml</h2>
+      <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          stack.map((group) => (
+            <div class="rounded-lg border border-border bg-surface p-5">
+              <p
+                class:list={['font-mono text-xs uppercase tracking-wide', domainText[group.domain]]}
+              >
+                {group.group}
+              </p>
+              <ul class="mt-3 flex flex-wrap gap-2">
+                {group.items.map((item) => (
+                  <li class="rounded border border-border px-2 py-1 font-mono text-xs text-muted">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section id="sobre" class="mt-24 border-t border-border pt-12">
+      <h2 class="font-mono text-sm uppercase tracking-wide text-accent-bright">$ cat about.md</h2>
+      <div class="mt-6 grid gap-8 lg:grid-cols-[220px,1.2fr,1fr] lg:items-start">
+        <TerminalWindow title="whoami.jpg" class="mx-auto w-40 lg:mx-0 lg:w-full">
+          <Image
+            src={profilePhoto}
+            alt="Photo of Otávio"
+            width={440}
+            height={440}
+            quality={82}
+            class="aspect-square w-full object-cover"
+          />
+        </TerminalWindow>
+
+        <div class="space-y-4 text-muted">
+          <p class="font-mono text-sm text-text">Otávio · DevOps &amp; Infrastructure</p>
+          <p>
+            I work with DevOps and infrastructure, managing multi-cluster Kubernetes (OKE)
+            environments that support multiple teams and product namespaces. My day-to-day covers
+            GitOps (ArgoCD), private networking (WireGuard, VCN/NSG), internal TLS via a private
+            PKI, and observability (Zabbix/Grafana) — usually in that order when something breaks in
+            production.
+          </p>
+          <p>
+            I particularly enjoy the diagnostic side: understanding <em class="text-text">why</em>{
+              ' '
+            }
+            a system failed, not just applying the fix. That's what led me to pursue a postgraduate degree
+            in Cybersecurity — I bring that threat/risk lens to everyday infrastructure decisions, not
+            just to projects explicitly labeled "security."
+          </p>
+        </div>
+
+        <TerminalWindow title="focus.sh" class="font-mono text-sm">
+          <ul class="space-y-2 p-4 text-text">
+            <li class="flex gap-2">
+              <span class="text-accent-bright">→</span> Standardizing multi-cluster GitOps
+            </li>
+            <li class="flex gap-2">
+              <span class="text-teal">→</span> Internal network hardening (WireGuard/NSG)
+            </li>
+            <li class="flex gap-2">
+              <span class="text-status">→</span> Private PKI & certificate lifecycle
+            </li>
+            <li class="flex gap-2">
+              <span class="text-ok">→</span> Support SLA & observability
+            </li>
+          </ul>
+        </TerminalWindow>
+      </div>
+    </section>
+
+    <section id="contato" class="mt-24 border-t border-border pt-12 text-center">
+      <h2 class="font-mono text-sm uppercase tracking-wide text-accent-bright">$ contact --send</h2>
+      <p class="mt-4 text-muted">
+        Open to conversations about DevOps, cloud infrastructure, and security.
+      </p>
+      <a
+        href="https://www.linkedin.com/in/otaviohcardoso/"
+        class="mt-5 inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-5 py-2.5 font-mono text-sm text-text transition-colors hover:border-accent hover:text-accent-bright"
+        rel="me"
+        target="_blank"
+      >
+        linkedin.com/in/otaviohcardoso ↗
+      </a>
+    </section>
+  </main>
+  <footer class="border-t border-border py-8 text-center font-mono text-xs text-muted">
+    build: <a href="https://github.com/otaviohc19/otaviorodrigues/actions" class="hover:text-text"
+      >pipeline</a
+    >
+    · source code: <a href="https://github.com/otaviohc19/otaviorodrigues" class="hover:text-text"
+      >github</a
+    >
+    · <a href="https://www.linkedin.com/in/otaviohcardoso/" class="hover:text-text">linkedin</a>
+  </footer>
+</BaseLayout>

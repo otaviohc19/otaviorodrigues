@@ -1,0 +1,70 @@
+---
+import ProjectLayout from '../../../layouts/ProjectLayout.astro';
+---
+
+<ProjectLayout
+  title="Applied security: this portfolio's own pipeline"
+  description="How a Cybersecurity lens translates into practice: SAST, secret scanning, SBOM, and CSP applied to the very repository behind this site."
+  domain="security"
+  caseId="06"
+>
+  <h2>Context</h2>
+  <p>
+    This case is a bit different from the others: instead of describing a corporate production
+    environment, it describes the security of <strong
+      >the very site you're looking at right now</strong
+    >{' '}
+    — because a postgraduate degree in Cybersecurity only has practical value if applied beyond projects
+    explicitly labeled "security." The full code is public in the{' '}
+    <a
+      href="https://github.com/otaviohc19/otaviorodrigues"
+      class="text-status underline decoration-status/40 underline-offset-2"
+    >
+      portfolio's repository
+    </a>
+    .
+  </p>
+
+  <h2>What runs on every push</h2>
+  <ul>
+    <li>
+      <strong>SAST (CodeQL)</strong> — static code analysis on every push/PR and weekly, looking for vulnerability
+      patterns before they reach production.
+    </li>
+    <li>
+      <strong>Secret scanning (Gitleaks)</strong> — ensures no key, token, or credential is ever committed,
+      even accidentally — and even if removed later, Git history would preserve the secret if it wasn't
+      caught in time.
+    </li>
+    <li>
+      <strong>Dependency scanning (Dependabot)</strong> — weekly monitoring of dependencies with known
+      vulnerabilities (CVEs), with rules to avoid mixing routine bumps with major versions that require
+      manual migration.
+    </li>
+    <li>
+      <strong>SBOM (Software Bill of Materials)</strong> — generated on every release, documenting exactly
+      which libraries and versions make up the site, for traceability in case a new vulnerability is discovered
+      in the future.
+    </li>
+  </ul>
+
+  <h2>A conscious decision: CSP in an environment with no server control</h2>
+  <p>
+    The site is hosted on GitHub Pages, which doesn't allow custom HTTP headers. This limits the
+    effectiveness of a real Content-Security-Policy — the alternative (CSP via{' '}
+    <code>&lt;meta&gt;</code>) doesn't cover directives like <code>frame-ancestors</code>, which
+    only work as a real HTTP header.
+  </p>
+  <p>
+    The decision was to explicitly document that limitation instead of appearing to have security
+    the hosting environment doesn't actually support — a principle that applies just as much to a
+    personal portfolio as to corporate infrastructure: being honest about where the protection
+    surface is weaker is more useful than pretending it doesn't exist.
+  </p>
+
+  <h2>Result</h2>
+  <p>
+    A publicly auditable pipeline, with real security checks instead of just claimed ones — anyone
+    can open the repository's <em>Actions</em> tab and see the checks passing.
+  </p>
+</ProjectLayout>

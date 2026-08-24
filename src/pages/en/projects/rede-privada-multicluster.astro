@@ -1,0 +1,55 @@
+---
+import ProjectLayout from '../../../layouts/ProjectLayout.astro';
+---
+
+<ProjectLayout
+  title="Private networking across environments"
+  description="WireGuard tunnels and corporate VPN connecting distinct clusters and environments, with routing, MTU, and cloud firewall-layer diagnostics."
+  domain="network"
+  caseId="03"
+>
+  <h2>Context</h2>
+  <p>
+    Multiple environments (production, staging/review) needing to communicate securely with each
+    other and with a third-party corporate VPN, without publicly exposing internal services. The
+    network surface involved Kubernetes clusters, database VMs, and legacy services — each with its
+    own set of firewall rules.
+  </p>
+
+  <h2>Approach</h2>
+  <p>
+    Two dedicated <strong>WireGuard</strong> tunnels connecting distinct environments, complemented by
+    integration with an external partner's corporate VPN client (FortiClient). To reduce human error when
+    switching context between environments, I automated VPN and{' '}
+    <code>kubectl</code> context switching into a single script.
+  </p>
+
+  <h2>Recurring diagnosis</h2>
+  <ul>
+    <li>
+      <strong>Routing gaps</strong> — missing routes in WireGuard's <code>AllowedIPs</code>, or
+      routing tables with <code>Table = off</code> requiring manual routes via{' '}
+      <code>PostUp</code>.
+    </li>
+    <li>
+      <strong>Firewall layers in OCI</strong> — Security Lists (subnet-level) and NSGs (resource-level)
+      overlapping in non-obvious ways; a block could be in either layer, requiring systematic checking
+      of both.
+    </li>
+    <li>
+      <strong>MTU</strong> — packets silently fragmenting on tunnels with misconfigured MTU, causing intermittent
+      timeouts that were hard to correlate with the real cause without traffic capture.
+    </li>
+    <li>
+      <strong>DNS-over-HTTPS</strong> — browsers ignoring the VPN's internal resolver for private domains,
+      causing name resolution to fail even with the correct network route.
+    </li>
+  </ul>
+
+  <h2>Result</h2>
+  <p>
+    Stable connectivity between environments with automated context switching, reducing network
+    troubleshooting time — most cases today are resolved by checking a known-causes checklist before
+    any deeper investigation.
+  </p>
+</ProjectLayout>

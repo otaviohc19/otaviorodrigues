@@ -1,0 +1,56 @@
+---
+import ProjectLayout from '../../../layouts/ProjectLayout.astro';
+---
+
+<ProjectLayout
+  title="Hybrid infrastructure: AWS and OCI"
+  description="Infrastructure architecture running across AWS and OCI, networking and compute decisions, and the cost analysis behind the migration."
+  domain="cloud"
+  caseId="01"
+>
+  <h2>Context</h2>
+  <p>
+    Infrastructure originally hosted on AWS, migrated to OCI (Oracle Cloud Infrastructure) while
+    maintaining the same service levels for the teams depending on it — APIs, portal, RPAs, and
+    whitelabel services. The challenge wasn't just "switching providers," it was keeping zero
+    perceptible downtime during the transition and redesigning networking and compute decisions that
+    didn't make sense simply copied from one provider to the other.
+  </p>
+
+  <h2>Architecture decisions</h2>
+  <p>
+    Kubernetes clusters (OKE) replacing the previous orchestration, VCNs and Network Security Groups
+    redesigned to reflect OCI's network segmentation model (different from AWS's Security Groups
+    model), and IAM policies rebuilt from scratch following the principle of least privilege —
+    instead of replicating broad permissions that existed for convenience in the previous
+    environment.
+  </p>
+
+  <h2>Cost analysis</h2>
+  <p>
+    After the migration, I formalized a comparative cost analysis to validate the decision with
+    technical leadership — not just confirming savings, but identifying <strong>where</strong>{' '}
+    they actually came from, and where the new provider cost more.
+  </p>
+  <p>
+    The item-by-item breakdown (compute, network/egress, storage, managed database) showed a
+    structural cost reduction — mostly explained by compute and network. One notable exception: the
+    managed database service (MySQL HeatWave) showed higher cost than the previous equivalent, which
+    required separate investigation into the billing model and charged OCIDs — including a
+    discrepancy between the number of billing OCIDs and the number of database instances visible in
+    the console, still under investigation.
+  </p>
+
+  <h2>Result</h2>
+  <p>
+    Migration completed with no perceptible incident for end users, with a documented structural
+    cost reduction and IAM policies more secure than the source environment's — a benefit that
+    wasn't in the original scope, but emerged naturally from rebuilding the infrastructure from
+    scratch instead of just replicating it.
+  </p>
+
+  <p class="pt-4 text-sm text-muted/80">
+    <strong>Note:</strong> values and system names were omitted for confidentiality. Happy to detail the
+    methodology in an interview.
+  </p>
+</ProjectLayout>

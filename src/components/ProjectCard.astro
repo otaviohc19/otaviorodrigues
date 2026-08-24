@@ -8,10 +8,22 @@ interface Props {
   tags: string[];
   caseId: string;
   domain: Domain;
+  href?: string;
+  ctaLabel?: string;
 }
 
-const { slug, title, summary, tags, caseId, domain } = Astro.props;
+const {
+  slug,
+  title,
+  summary,
+  tags,
+  caseId,
+  domain,
+  href,
+  ctaLabel = 'ver caso completo',
+} = Astro.props;
 const base = import.meta.env.BASE_URL;
+const targetHref = href ?? `${base}projects/${slug}/`;
 
 const domainStyles: Record<Domain, { bar: string; hoverText: string; tag: string }> = {
   cloud: { bar: 'bg-rose', hoverText: 'group-hover:text-rose', tag: 'text-rose' },
@@ -29,7 +41,7 @@ const style = domainStyles[domain];
 ---
 
 <a
-  href={`${base}projects/${slug}/`}
+  href={targetHref}
   class="group relative block overflow-hidden rounded-lg border border-border bg-surface p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:bg-surface-hover hover:shadow-lg hover:shadow-black/30"
 >
   <span class:list={['absolute inset-y-0 left-0 w-0.5', style.bar]} aria-hidden="true"></span>
@@ -53,7 +65,7 @@ const style = domainStyles[domain];
       style.hoverText,
     ]}
   >
-    ver caso completo
+    {ctaLabel}
     <span class="transition-transform group-hover:translate-x-0.5" aria-hidden="true">→</span>
   </p>
 </a>
