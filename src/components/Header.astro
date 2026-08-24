@@ -9,7 +9,7 @@ const withoutLangPrefix = isEnglish ? relative.replace(/^en\/?/, '') : relative;
 const homeHref = isEnglish ? `${base}en/` : base;
 const langPrefix = isEnglish ? `${base}en/` : base;
 const otherLangHref = isEnglish ? `${base}${withoutLangPrefix}` : `${base}en/${withoutLangPrefix}`;
-const otherLangLabel = isEnglish ? '🇧🇷' : '🇺🇸';
+const otherLangLabel = isEnglish ? 'PT' : 'EN';
 
 const t = isEnglish
   ? { projects: 'projects', stack: 'stack', about: 'about', contact: 'contact' }
